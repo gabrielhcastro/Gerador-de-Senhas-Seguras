@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerador de Senhas Seguras</title>
-    <!-- Incluindo Tailwind CSS para estilização rápida -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Estilização para a aparência do slider */
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
@@ -34,7 +32,6 @@
         <h1 class="text-3xl font-bold text-center text-indigo-400 mb-2">Gerador de Senhas</h1>
         <p class="text-center text-gray-400 mb-8">Crie senhas fortes e seguras com um clique.</p>
 
-        <!-- Display da Senha Gerada -->
         <div class="relative mb-6">
             <input type="text" id="password-display"
                    class="w-full bg-gray-900 text-gray-200 text-lg p-4 rounded-lg border-2 border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
@@ -45,9 +42,7 @@
             <span id="copy-feedback" class="absolute top-1/2 right-12 transform -translate-y-1/2 text-sm text-green-400 opacity-0 transition-opacity">Copiado!</span>
         </div>
 
-        <!-- Controles de Geração -->
         <div class="space-y-6">
-            <!-- Controle de Comprimento -->
             <div class="flex items-center justify-between">
                 <label for="length" class="text-lg font-medium">Comprimento da Senha</label>
                 <span id="length-value" class="text-2xl font-bold text-indigo-400 w-12 text-center">16</span>
@@ -55,7 +50,6 @@
             <input type="range" id="length" min="4" max="64" value="16"
                    class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
 
-            <!-- Opções de Complexidade -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="flex items-center bg-gray-700 p-3 rounded-lg">
                     <input id="uppercase" type="checkbox" checked class="w-5 h-5 text-indigo-500 bg-gray-900 border-gray-600 rounded focus:ring-indigo-600 ring-offset-gray-800 focus:ring-2">
@@ -72,7 +66,6 @@
             </div>
         </div>
 
-        <!-- Botão de Gerar -->
         <button id="generate-button" class="w-full mt-8 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-4 rounded-lg text-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 flex items-center justify-center gap-2">
             <i class="fas fa-bolt"></i>
             Gerar Senha
@@ -84,7 +77,6 @@
     </div>
 
     <script>
-        // Seletores de elementos do DOM
         const lengthSlider = document.getElementById('length');
         const lengthValue = document.getElementById('length-value');
         const generateButton = document.getElementById('generate-button');
@@ -94,28 +86,22 @@
         const errorMessage = document.getElementById('error-message');
         const loadingSpinner = document.getElementById('loading-spinner');
 
-        // URL da API (deve estar rodando localmente na porta 5000)
         const API_URL = 'http://127.0.0.1:5000/generate-password';
 
-        // Atualiza o valor do comprimento exibido quando o slider muda
         lengthSlider.addEventListener('input', () => {
             lengthValue.textContent = lengthSlider.value;
         });
 
-        // Função para gerar a senha
         async function generatePassword() {
-            // Mostra o spinner e desabilita o botão
             loadingSpinner.classList.remove('hidden');
             generateButton.disabled = true;
             errorMessage.textContent = '';
             
-            // Pega as opções de complexidade
             const includeUppercase = document.getElementById('uppercase').checked;
             const includeNumbers = document.getElementById('numbers').checked;
             const includeSymbols = document.getElementById('symbols').checked;
             const length = lengthSlider.value;
 
-            // Constrói a URL da API com os parâmetros
             const queryParams = new URLSearchParams({
                 length: length,
                 uppercase: includeUppercase,
@@ -138,17 +124,14 @@
                 passwordDisplay.value = '';
                 errorMessage.textContent = 'Não foi possível conectar à API.';
             } finally {
-                // Esconde o spinner e reabilita o botão
                 loadingSpinner.classList.add('hidden');
                 generateButton.disabled = false;
             }
         }
 
-        // Função para copiar a senha
         function copyPassword() {
             if (!passwordDisplay.value) return;
 
-            // Cria um textarea temporário para copiar
             const textarea = document.createElement('textarea');
             textarea.value = passwordDisplay.value;
             document.body.appendChild(textarea);
@@ -156,18 +139,15 @@
             document.execCommand('copy');
             document.body.removeChild(textarea);
 
-            // Mostra o feedback de "Copiado!"
             copyFeedback.style.opacity = '1';
             setTimeout(() => {
                 copyFeedback.style.opacity = '0';
             }, 2000);
         }
 
-        // Adiciona os event listeners
         generateButton.addEventListener('click', generatePassword);
         copyButton.addEventListener('click', copyPassword);
 
-        // Gera uma senha inicial ao carregar a página
         window.addEventListener('load', generatePassword);
     </script>
 </body>
